@@ -1,25 +1,35 @@
-const faker = require('faker');
+// const faker = require('faker'); // OLD VERSION
+const { faker } = require("@faker-js/faker");
 
 let minionIdCounter = 1;
 
 const createMinion = () => {
-  const weaknesses = new Array(3).fill(0).map(() => {
-    const reasons = ['Cannot do', 'Unable to execute', 'Will not build'];
-    const reason = reasons[Math.floor(Math.random() * reasons.length)];
-    const adj = faker.company.bsAdjective();
-    const noun = faker.company.catchPhraseNoun();
-    return `${reason} ${adj} ${noun}`;
-  })
-  .join(', ') + ', too ' + faker.hacker.adjective()
+  const weaknesses =
+    new Array(3)
+      .fill(0)
+      .map(() => {
+        const reasons = ["Cannot do", "Unable to execute", "Will not build"];
+        const reason = reasons[Math.floor(Math.random() * reasons.length)];
+        // const adj = faker.company.bsAdjective();
+        // const noun = faker.company.catchPhraseNoun(); //oll faker
+        const adj = faker.hacker.adjective();
+        const noun = faker.hacker.noun();
+        return `${reason} ${adj} ${noun}`;
+      })
+      .join(", ") +
+    ", too " +
+    faker.hacker.adjective();
 
   return {
     id: `${minionIdCounter++}`,
-    name: faker.name.findName(),
-    title: faker.name.jobTitle(),
+    // name: faker.name.findName(),
+    // title: faker.name.jobTitle(),
+    name: faker.person.fullName(),
+    title: faker.person.jobTitle(),
     weaknesses: weaknesses,
     salary: 40000,
-  }
-}
+  };
+};
 
 let workIdCounter = 1;
 
@@ -27,24 +37,25 @@ const createWork = (minionId) => {
   return {
     id: `${workIdCounter++}`,
     title: `Close deal #${Math.floor(Math.random() * 4) + 3}`,
-    description: 'Close the biggest deal!',
+    description: "Close the biggest deal!",
     hours: Math.floor(Math.random() * 8) + 1,
     minionId: `${minionId}`,
-  }
-}
+  };
+};
 
 let ideaIdCounter = 1;
 const companies = [
-  'Codecademy',
-  'Uber',
-  'Snapchat',
-  'Facebook',
-  'Microservices',
-  'Pets.com',
+  "Codecademy",
+  "Uber",
+  "Snapchat",
+  "Facebook",
+  "Microservices",
+  "Pets.com",
 ];
 
 const createIdea = () => {
-  const noun = faker.company.bsNoun();
+  // const noun = faker.company.bsNoun();
+  const noun = faker.company.catchPhraseNoun();
   const name = companies[Math.floor(Math.random() * companies.length)];
   let weeklyRevenue = 0;
   let numWeeks = 0;
@@ -56,11 +67,11 @@ const createIdea = () => {
   return {
     id: `${ideaIdCounter++}`,
     name: `${name} but for ${noun}`,
-    description: 'The name says it all!!!',
+    description: "The name says it all!!!",
     weeklyRevenue: weeklyRevenue,
     numWeeks: numWeeks,
-  }
-}
+  };
+};
 
 let meetingIdCounter = 1;
 
@@ -74,84 +85,98 @@ const createMeeting = () => {
     date: date,
     day: date.toDateString(),
     note: `${option} ${faker.company.catchPhrase()}`,
-  }
-}
+  };
+};
 
 const allMinions = new Array(10).fill(0).map(createMinion);
 const allIdeas = new Array(10).fill(0).map(createIdea);
-const allWork = allMinions.map(minion => createWork(minion.id));
+const allWork = allMinions.map((minion) => createWork(minion.id));
 const allMeetings = new Array(3).fill(0).map(createMeeting);
 
 const isValidMinion = (instance) => {
-  instance.name = instance.name || '';
-  instance.weaknesses = instance.weaknesses || '';
-  instance.title = instance.title || '';
-  if (typeof instance.name !== 'string' || typeof instance.weaknesses !== 'string'
-  || typeof instance.title !== 'string') {
-    throw new Error('Minion\'s name, title, and weaknesses must be strings');
+  instance.name = instance.name || "";
+  instance.weaknesses = instance.weaknesses || "";
+  instance.title = instance.title || "";
+  if (
+    typeof instance.name !== "string" ||
+    typeof instance.weaknesses !== "string" ||
+    typeof instance.title !== "string"
+  ) {
+    throw new Error("Minion's name, title, and weaknesses must be strings");
   }
   if (!isNaN(parseFloat(instance.salary)) && isFinite(instance.salary)) {
     instance.salary = Number(instance.salary);
   } else {
-    throw new Error('Minion\'s salary must be a number.');
+    throw new Error("Minion's salary must be a number.");
   }
   return true;
-}
+};
 
 const isValidIdea = (instance) => {
-  instance.name = instance.name || '';
-  instance.description = instance.description || '';
-  if (typeof instance.name !== 'string' || typeof instance.description !== 'string') {
-    throw new Error('Idea\'s name and description must be strings');
+  instance.name = instance.name || "";
+  instance.description = instance.description || "";
+  if (
+    typeof instance.name !== "string" ||
+    typeof instance.description !== "string"
+  ) {
+    throw new Error("Idea's name and description must be strings");
   }
   if (!isNaN(parseFloat(instance.numWeeks)) && isFinite(instance.numWeeks)) {
     instance.numWeeks = Number(instance.numWeeks);
   } else {
-    throw new Error('Idea\'s numWeeks must be a number.');
+    throw new Error("Idea's numWeeks must be a number.");
   }
-  if (!isNaN(parseFloat(instance.weeklyRevenue)) && isFinite(instance.weeklyRevenue)) {
+  if (
+    !isNaN(parseFloat(instance.weeklyRevenue)) &&
+    isFinite(instance.weeklyRevenue)
+  ) {
     instance.weeklyRevenue = Number(instance.weeklyRevenue);
   } else {
-    throw new Error('Idea\'s weeklyRevenue must be a number.');
+    throw new Error("Idea's weeklyRevenue must be a number.");
   }
   return true;
-}
+};
 
 const isValidWork = (instance) => {
-  instance.title = instance.title || '';
-  instance.description = instance.description || '';
-  if (typeof instance.title !== 'string' || typeof instance.description !== 'string') {
-    throw new Error('Work\'s title and description must be strings');
+  instance.title = instance.title || "";
+  instance.description = instance.description || "";
+  if (
+    typeof instance.title !== "string" ||
+    typeof instance.description !== "string"
+  ) {
+    throw new Error("Work's title and description must be strings");
   }
   if (!isNaN(parseFloat(instance.hours)) && isFinite(instance.hours)) {
     instance.hours = Number(instance.hours);
   } else {
-    throw new Error('Work\'s hours must be a number.');
+    throw new Error("Work's hours must be a number.");
   }
   let isValidMinionId = db.allMinions.data.find((minion) => {
     return minion.id === instance.minionId;
   });
   if (!isValidMinionId) {
-    throw new Error('Work must have a valid minionId that actually exists in the database');
+    throw new Error(
+      "Work must have a valid minionId that actually exists in the database"
+    );
   }
   return true;
-}
+};
 
 const isValidMeeting = (instance) => {
-  if (typeof instance.time !== 'string' || instance.time.length < 4) {
-    throw new Error('Meeting time must be valid!');
+  if (typeof instance.time !== "string" || instance.time.length < 4) {
+    throw new Error("Meeting time must be valid!");
   }
   if (!instance.date instanceof Date) {
-    throw new Error('Meeting date must be a JS Date object');
+    throw new Error("Meeting date must be a JS Date object");
   }
-  if (!instance.day || typeof instance.day !== 'string') {
-    throw new Error('Meeting must have a day property');
+  if (!instance.day || typeof instance.day !== "string") {
+    throw new Error("Meeting must have a day property");
   }
-  if (!instance.note || typeof instance.note !== 'string') {
-    throw new Error('Meeting must have a valid note property');
+  if (!instance.note || typeof instance.note !== "string") {
+    throw new Error("Meeting must have a valid note property");
   }
   return true;
-}
+};
 
 const db = {
   allMinions: {
@@ -173,24 +198,23 @@ const db = {
     data: allMeetings,
     nextId: meetingIdCounter,
     isValid: isValidMeeting,
-  }
-}
-
+  },
+};
 
 const findDataArrayByName = (name) => {
   switch (name) {
-    case 'minions':
+    case "minions":
       return db.allMinions;
-    case 'ideas':
+    case "ideas":
       return db.allIdeas;
-    case 'work':
+    case "work":
       return db.allWork;
-    case 'meetings':
+    case "meetings":
       return db.allMeetings;
     default:
       return null;
   }
-}
+};
 
 const getAllFromDatabase = (modelType) => {
   const model = findDataArrayByName(modelType);
@@ -198,7 +222,7 @@ const getAllFromDatabase = (modelType) => {
     return null;
   }
   return model.data;
-}
+};
 
 const getFromDatabaseById = (modelType, id) => {
   const model = findDataArrayByName(modelType);
@@ -208,7 +232,7 @@ const getFromDatabaseById = (modelType, id) => {
   return model.data.find((element) => {
     return element.id === id;
   });
-}
+};
 
 const addToDatabase = (modelType, instance) => {
   const model = findDataArrayByName(modelType);
@@ -220,7 +244,7 @@ const addToDatabase = (modelType, instance) => {
     model.data.push(instance);
     return model.data[model.data.length - 1];
   }
-}
+};
 
 const updateInstanceInDatabase = (modelType, instance) => {
   const model = findDataArrayByName(modelType);
@@ -236,7 +260,7 @@ const updateInstanceInDatabase = (modelType, instance) => {
   } else {
     return null;
   }
-}
+};
 
 const deleteFromDatabasebyId = (modelType, id) => {
   const model = findDataArrayByName(modelType);
@@ -252,7 +276,7 @@ const deleteFromDatabasebyId = (modelType, id) => {
   } else {
     return false;
   }
-}
+};
 
 const deleteAllFromDatabase = (modelType) => {
   const model = findDataArrayByName(modelType);
@@ -261,7 +285,7 @@ const deleteAllFromDatabase = (modelType) => {
   }
   model.data = [];
   return model.data;
-}
+};
 
 module.exports = {
   createMeeting,
