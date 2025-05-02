@@ -2,6 +2,8 @@ const express = require("express");
 const ideasRouter = express.Router();
 //connect db.js
 const db = require("../db");
+//Connect our middleware function
+const checkMillionDollarIdea = require("../checkMillionDollarIdea");
 
 //GET /api/ideas to get an array of all ideas.
 ideasRouter.get("/", (req, res) => {
@@ -13,7 +15,7 @@ ideasRouter.get("/", (req, res) => {
 });
 
 // POST /api/ideas to create a new idea and save it to the database.
-ideasRouter.post("/", (req, res) => {
+ideasRouter.post("/", checkMillionDollarIdea, (req, res) => {
   const newIdee = {
     name: req.body.name,
     description: req.body.description,
@@ -42,7 +44,7 @@ ideasRouter.get("/:ideaId", (req, res) => {
 });
 
 // PUT /api/ideas/:ideaId to update a single idea by id.
-ideasRouter.put("/:ideaId", (req, res) => {
+ideasRouter.put("/:ideaId", checkMillionDollarIdea, (req, res) => {
   const updateIdee = {
     id: req.params.ideaId,
     name: req.body.name,
