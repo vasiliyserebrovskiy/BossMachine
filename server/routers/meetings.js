@@ -3,7 +3,7 @@ const meetingsRouter = express.Router();
 //connect db.js
 const db = require("../db");
 
-//Get all meetings
+//GET /api/meetings to get an array of all meetings.
 meetingsRouter.get("/", (req, res) => {
   const meetings = db.getAllFromDatabase("meetings");
 //   console.log("GET RESULT = ", meetings);
@@ -11,5 +11,8 @@ meetingsRouter.get("/", (req, res) => {
     res.send(meetings);
   }
 });
+
+// POST /api/meetings to create a new meeting and save it to the database.
+// DELETE /api/meetings to delete all meetings from the database.
 
 module.exports = meetingsRouter;

@@ -9,10 +9,12 @@ apiRouter.use(morgan("dev"));
 const minionsRouter = require("./routers/minions");
 const ideasRouter = require("./routers/ideas");
 const meetingsRouter = require("./routers/meetings");
+// const worksRouter = require("./routers/works");
 
 //use our routers
 apiRouter.use("/minions", minionsRouter);
 apiRouter.use("/ideas", ideasRouter);
 apiRouter.use("/meetings", meetingsRouter);
+// apiRouter.use("/minions/:minionId/work", worksRouter);
 
 module.exports = apiRouter;
