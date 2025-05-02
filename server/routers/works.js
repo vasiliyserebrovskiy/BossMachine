@@ -50,7 +50,7 @@ worksRouter.put("/:workId", (req, res) => {
   };
 
   const result = db.updateInstanceInDatabase("work", updatedWork);
-  console.log("Updated Work: ", updatedWork);
+
   if (result) {
     res.send(result);
   } else {
@@ -60,7 +60,7 @@ worksRouter.put("/:workId", (req, res) => {
 // DELETE /api/minions/:minionId/work/:workId to delete a single work by id.
 worksRouter.delete("/:workId", (req, res) => {
   const result = db.deleteFromDatabasebyId("work", req.params.workId);
-  console.log("Delete work: ", result);
+
   if (result) {
     res.send(result);
   } else {

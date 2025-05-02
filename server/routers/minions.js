@@ -44,7 +44,7 @@ minionsRouter.get("/:minionId", (req, res) => {
   if (result) {
     res.send(result);
   } else {
-    res.status(404).send({ error: "Wrong minionId" });
+    res.status(404).send({ error: "Error: Wrong minion id." });
   }
 });
 
